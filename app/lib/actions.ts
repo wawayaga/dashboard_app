@@ -52,10 +52,6 @@ export async function createInvoice(prevState: State, formData: FormData){
         status: formData.get('status'),
     });
 
-    console.log(`validated fields is ${validatedFields}`);
-    console.log(`validated fields errors is ${validatedFields.error}`);
-    console.log(`validatedFields.success is ${validatedFields.success}`);
-
   // If form validation fails, return errors early. Otherwise, continue.
   if (!validatedFields.success) {
     return {
@@ -81,7 +77,6 @@ export async function createInvoice(prevState: State, formData: FormData){
     `;
     } catch (error) {
     // If a database error occurs, return a more specific error.
-      console.error(error);
       return {
         message:'Database Error: Failed to Create Invoice'
       };
@@ -120,7 +115,6 @@ export async function updateInvoice(prevState: State, id: string, formData: Form
     WHERE id = ${id}
   `;
   } catch(error){
-    console.log(error);
     return{
       message:'Database Error. Failed to Update Invoice'
     };
@@ -135,10 +129,7 @@ export async function deleteInvoice(id: string) {
     await sql`DELETE FROM invoices WHERE ID = ${id}`;
     revalidatePath('/dashboard/invoices');
   } catch(error){
-    console.log(error);
-    return{
-      message:'Database Error. Failed to Delte Invoice'
-    };
+      throw new Error('Failed to Delte Invoice.');
   }
 }
 
